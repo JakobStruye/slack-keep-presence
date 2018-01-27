@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "slack_keep_presence"
+require 'optparse'
+
+options = { debug: false }
+OptionParser.new do |opts|
+  opts.banner = "Usage: slack-keep-presence [options]"
+
+  opts.on('-d', '--debug', 'Show debug info') { options[:debug] = true }
+end.parse!
+
+SlackKeepPresence::Main.new(options)
