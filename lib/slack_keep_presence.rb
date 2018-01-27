@@ -47,7 +47,9 @@ module SlackKeepPresence
     end
 
     def start_realtime
-      rtm = client.post("rtm.start", batch_presence_aware: true)
+      @should_shutdown = false
+
+      rtm = client.post("rtm.connect", batch_presence_aware: true)
       ws_url = rtm['url']
 
       @ws = Faye::WebSocket::Client.new(ws_url, nil, ping: 30)
@@ -75,7 +77,18 @@ module SlackKeepPresence
           next unless data['presence'] == 'away'
 
           logger.info("Presence changed to #{data['presence']}")
-          set_active
+
+          # Slack's setActive api doesn't seem to be working.
+          # For now just reestablish the realtime connection
+          # which automatically sets you as active
+          # set_active
+          # res = client.users_getPresence(user: user)
+          # logger.debug "#{res}"
+
+          ws.close
+          @ws = nil
+          @should_shutdown = true
+          start_realtime
         end
       end
 

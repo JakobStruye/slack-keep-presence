@@ -11,4 +11,5 @@ OptionParser.new do |opts|
   opts.on('-d', '--debug', 'Show debug info') { options[:debug] = true }
 end.parse!
 
+Process.setproctitle('slack-keep-presence')
 SlackKeepPresence::Main.new(options)
