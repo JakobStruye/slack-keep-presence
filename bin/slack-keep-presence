@@ -2,6 +2,7 @@
 
 require "bundler/setup"
 require "slack_keep_presence"
+require "slack_keep_presence/version"
 require 'optparse'
 
 options = { debug: false }
@@ -9,6 +10,12 @@ OptionParser.new do |opts|
   opts.banner = "Usage: slack-keep-presence [options]"
 
   opts.on('-d', '--debug', 'Show debug info') { options[:debug] = true }
+
+  opts.on("-h", "--help", "Prints this help") do
+    puts "slack-keep-presence version #{SlackKeepPresence::VERSION}"
+    puts opts
+    exit
+  end
 end.parse!
 
 Process.setproctitle('slack-keep-presence')
