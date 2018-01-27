@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Disable Slack auto-away}
   spec.description   = %q{Mark your Slack user as active when auto-away kicks in}
-  spec.homepage      = 'https://github.com/joshfng/slack_keep_presence'
+  spec.homepage      = 'https://github.com/joshfng/slack-keep-presence'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
