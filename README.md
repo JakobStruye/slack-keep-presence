@@ -7,7 +7,7 @@ Inspired by [slack-keep-presence](https://github.com/eskerda/slack-keep-presence
 ## Installation
 
 ```
-$ gem install slack_keep_presence
+$ gem install slack-keep-presence
 ```
 
 ## Usage
