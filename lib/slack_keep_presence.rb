@@ -30,7 +30,7 @@ module SlackKeepPresence
     end
 
     def clean_shutdown
-      logger.info('Shutting down...')
+      puts 'Shutting down...'
       @should_shutdown = true;
       ws.close;
       EM.stop;

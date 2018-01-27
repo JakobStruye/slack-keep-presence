@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    slack_keep_presence (0.1.0)
+    slack-keep-presence (0.1.0)
       faye-websocket (~> 0.10.6)
       slack-api (~> 1.6)
 
@@ -55,7 +55,7 @@ DEPENDENCIES
   pry
   rake (~> 10.0)
   rspec (~> 3.0)
-  slack_keep_presence!
+  slack-keep-presence!
 
 BUNDLED WITH
    1.16.1
