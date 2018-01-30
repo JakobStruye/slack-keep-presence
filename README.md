@@ -1,6 +1,6 @@
 # slack-keep-presence
 
-Marks your user as active when auto-away kicks in
+Marks a slack user as active when auto-away kicks in. Useful for keeping slack bots online.
 
 Inspired by [slack-keep-presence](https://github.com/eskerda/slack-keep-presence). This is basically a ruby port with only the presence functionality retained.
 

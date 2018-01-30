@@ -55,7 +55,7 @@ module SlackKeepPresence
       @ws = Faye::WebSocket::Client.new(ws_url, nil, ping: 30)
 
       ws.on :open do |event|
-        logger.info('Connected to Slack RealTime API')
+        logger.debug('Connected to Slack RealTime API')
 
         payload = {
           type: 'presence_sub',
@@ -76,6 +76,15 @@ module SlackKeepPresence
           next unless data['user'] == user
           next unless data['presence'] == 'away'
 
+          # get the status to make sure this isn't manual_away
+          away_info = client.users_getPresence(user: user)
+          logger.debug(away_info)
+
+          if away_info['manual_away']
+            logger.info('User marked as manual_away, skipping')
+            next
+          end
+
           logger.info("Presence changed to #{data['presence']}")
 
           # Slack's setActive api doesn't seem to be working.
@@ -85,6 +94,7 @@ module SlackKeepPresence
           # res = client.users_getPresence(user: user)
           # logger.debug "#{res}"
 
+          logger.info("Marking #{user} as active")
           ws.close
           @ws = nil
           @should_shutdown = true
@@ -95,7 +105,7 @@ module SlackKeepPresence
       ws.on [:close, :error] do |event|
         next if should_shutdown
 
-        logger.info('Connection to Slack RealTime API terminated, reconnecting')
+        logger.debug('Connection to Slack RealTime API terminated, reconnecting')
         sleep 5
         start_realtime
       end
@@ -103,10 +113,10 @@ module SlackKeepPresence
 
     def set_active
       logger.info("Marking #{user} as active")
-      res = client.users_setActive
+      res = client.users_setPresence(presence: 'auto', set_active: true)
       logger.debug(res)
 
-      res = client.users_getPresence(user: user)
+      res = client.users_getPresence(user: user, set_active: true)
       logger.debug(res)
     end
   end
