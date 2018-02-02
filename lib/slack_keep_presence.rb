@@ -43,6 +43,19 @@ module SlackKeepPresence
 
       EM.run do
         start_realtime
+
+        EM.add_periodic_timer(5) do
+          next unless ws
+
+          timeouter = EventMachine::Timer.new(2) do
+            logger.info('Connection to Slack terminated, reconnecting...')
+            restart_connection
+          end
+
+          ws.ping('detecting presence') do
+            timeouter.cancel
+          end
+        end
       end
     end
 
@@ -55,7 +68,7 @@ module SlackKeepPresence
       @ws = Faye::WebSocket::Client.new(ws_url, nil, ping: 30)
 
       ws.on :open do |event|
-        logger.debug('Connected to Slack RealTime API')
+        logger.info('Connected to Slack RealTime API')
 
         payload = {
           type: 'presence_sub',
@@ -95,10 +108,7 @@ module SlackKeepPresence
           # logger.debug "#{res}"
 
           logger.info("Marking #{user} as active")
-          ws.close
-          @ws = nil
-          @should_shutdown = true
-          start_realtime
+          restart_connection
         end
       end
 
@@ -108,6 +118,19 @@ module SlackKeepPresence
         logger.debug('Connection to Slack RealTime API terminated, reconnecting')
         sleep 5
         start_realtime
+      end
+    end
+
+    def restart_connection
+      @should_shutdown = true
+      @ws.close
+      @ws = nil
+      begin
+        start_realtime
+      rescue Faraday::ConnectionFailed
+        logger.info('Failed to establish connection, retrying...')
+        sleep 5
+        retry
       end
     end
 

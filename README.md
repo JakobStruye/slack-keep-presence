@@ -4,6 +4,10 @@ Marks a slack user as active when auto-away kicks in. Useful for keeping slack b
 
 Inspired by [slack-keep-presence](https://github.com/eskerda/slack-keep-presence). This is basically a ruby port with only the presence functionality retained.
 
+## Features
+  - Uses websockets to connect to Slack's real time api to track presence
+  - Automatically reconnects if the connection drops and comes back
+
 ## Installation
 
 ```
