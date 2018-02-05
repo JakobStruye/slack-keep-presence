@@ -127,7 +127,7 @@ module SlackKeepPresence
       @ws = nil
       begin
         start_realtime
-      rescue Faraday::ConnectionFailed
+      rescue Faraday::ConnectionFailed, Faraday::TimeoutError
         logger.info('Failed to establish connection, retrying...')
         sleep 5
         retry
