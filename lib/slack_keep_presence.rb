@@ -100,14 +100,8 @@ module SlackKeepPresence
 
           logger.info("Presence changed to #{data['presence']}")
 
-          # Slack's setActive api doesn't seem to be working.
-          # For now just reestablish the realtime connection
-          # which automatically sets you as active
-          # set_active
-          # res = client.users_getPresence(user: user)
-          # logger.debug "#{res}"
-
           logger.info("Marking #{user} as active")
+          set_presence_active
           restart_connection
         end
       end
@@ -134,12 +128,8 @@ module SlackKeepPresence
       end
     end
 
-    def set_active
-      logger.info("Marking #{user} as active")
+    def set_presence_active
       res = client.users_setPresence(presence: 'auto', set_active: true)
-      logger.debug(res)
-
-      res = client.users_getPresence(user: user, set_active: true)
       logger.debug(res)
     end
   end
