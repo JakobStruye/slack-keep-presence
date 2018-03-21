@@ -93,10 +93,10 @@ module SlackKeepPresence
           away_info = client.users_getPresence(user: user)
           logger.debug(away_info)
 
-          if away_info['manual_away']
-            logger.info('User marked as manual_away, skipping')
-            next
-          end
+          #if away_info['manual_away']
+          #  logger.info('User marked as manual_away, skipping')
+          #  next
+          #end
 
           logger.info("Presence changed to #{data['presence']}")
 
